@@ -8,7 +8,7 @@ pipeline {
         APP_PORT       = '8080'
         HOST_PORT      = '80'
         HEALTH_URL     = "http://localhost:${HOST_PORT}/"
-        REGISTRY_CREDS = 'dockerhub-creds'
+        REGISTRY_CREDS = 'dockerhub_creds'
         EC2_SSH_CREDS  = 'ec2-ssh-key'
         EC2_HOST       = 'ec2-user@13.204.46.212'          // <-- change to your EC2
         IMAGE_TAG      = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
