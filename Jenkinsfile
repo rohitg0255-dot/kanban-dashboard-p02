@@ -102,5 +102,9 @@ pipeline {
         always { sh 'docker logout || true' }
     }
 
+    triggers {
+        githubPush()
+    }
+
 }
 
