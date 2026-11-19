@@ -6,11 +6,11 @@ pipeline {
         IMAGE_NAME     = 'rohitg0255/project02-kbd'      // no docker.io/ prefix
         CONTAINER_NAME = 'project02-kbd'
         APP_PORT       = '8080'
-        HOST_PORT      = '8080'
+        HOST_PORT      = '80'
         HEALTH_URL     = "http://localhost:${HOST_PORT}/"
         REGISTRY_CREDS = 'dockerhub-creds'
         EC2_SSH_CREDS  = 'ec2-ssh-key'
-        EC2_HOST       = 'ec2-user@203.0.113.10'          // <-- change to your EC2
+        EC2_HOST       = 'ec2-user@13.204.46.212'          // <-- change to your EC2
         IMAGE_TAG      = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
     }
 
