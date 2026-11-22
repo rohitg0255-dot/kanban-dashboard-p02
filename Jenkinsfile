@@ -103,13 +103,17 @@ pipeline {
 
         stage('Health Check') {
             steps {
+                sshagent([env.EC2_SSH_CREDS]) {
                     sh """
+                        ssh -o StrictHostKeyChecking=no ${EC2_HOST} '
                             for i in \$(seq 1 20); do
                                 wget -q --spider ${HEALTH_URL} && exit 0
                                 sleep 3
                             done
                             exit 1
+                        '
                     """
+                }
             }
         }
     }
@@ -118,7 +122,9 @@ pipeline {
         success { echo "Deploy OK: ${IMAGE_NAME}:${IMAGE_TAG}" }
         failure {
             echo "FAILED — rolling back"
+            sshagent([env.EC2_SSH_CREDS]) {
                 sh """
+                    ssh -o StrictHostKeyChecking=no ${EC2_HOST} '
                         PREV=\$(cat /tmp/prev_image_${CONTAINER_NAME} 2>/dev/null)
                         if [ -n "\$PREV" ] && [ "\$PREV" != "null" ]; then
                             docker rm -f ${CONTAINER_NAME} 2>/dev/null || true
@@ -127,7 +133,9 @@ pipeline {
                             -p ${HOST_PORT}:${APP_PORT} \$PREV                               
 
                         fi
+                    '
                 """
+            }
         }
         always { sh 'docker logout || true' }
     }
